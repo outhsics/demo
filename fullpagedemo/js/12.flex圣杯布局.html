@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		
+		<style>
+		
+			html,body{height: 100%;}
+			body{display: flex;
+				flex-direction: column;
+				}
+			header,footer,section{border:1px solid #ccc;margin:5px;}
+			header,footer{flex:0 0 50px;}
+			section{flex:1 1 auto; display: flex;}
+			article{flex:1 1 auto;}
+			aside,nav{flex:0 0 100px;background: #ccc;}
+			
+		</style>
+	</head>
+	<body>
+		<header>
+				header
+		</header>
+		<section>
+			<aside>
+				侧边栏
+			</aside>
+			<article>
+				主体
+			</article>
+			<nav>
+				导航
+			</nav>
+		</section>
+		<footer>
+			footer
+		</footer>
+	</body>
+</html>

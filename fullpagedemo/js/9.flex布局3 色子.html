@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+			
+			body{
+				background: blue;
+				display:flex;
+				/*flex-wrap: wrap;*/
+				height: 600px;
+				align-content: center;
+				}
+			.content{
+				width:100px;
+				height:100px;
+				background: #fff;
+				border-radius: 10px;
+				display: flex;
+				box-shadow: 2px 2px 2px rgba(0,0,0,.8);
+				margin:20px;
+			}
+			.item{
+				width:25px;
+				height:25px;
+				border-radius: 10px;
+				background: #f40;
+				box-shadow: 2px 2px 2px rgba(0,0,0,.8);
+			}
+			.one{
+				justify-content: center;
+				align-items: center;
+				order:-1;
+			}
+			.two{
+				justify-content: space-around;
+				align-items: center;
+			}
+			.three{
+				justify-content: space-around;
+				align-items: center;
+				order:-100;
+			}
+			.four{
+				flex-direction: column;
+				justify-content: space-around;
+			}
+			.four > div{
+				display: flex;
+				justify-content: space-around;
+			}
+			
+			
+		</style>
+	</head>
+	<body>
+		
+		<div class="content four" >
+			<div> 
+				<div class="item">1</div>
+				<div class="item">2</div>
+			
+			</div>
+
+			<div> 
+				<div class="item">3</div>
+				<div class="item">4</div>
+			</div>
+
+			<div> 
+				<div class="item">5</div>
+				<div class="item">6</div>
+			
+			</div>
+
+		</div>
+		
+		<div class="content four" >
+			<div> 
+				<div class="item">1</div>
+				<div class="item">2</div>
+			
+			</div>
+
+			<div> <div class="item">3</div> </div>
+
+			<div> 
+				<div class="item">4</div>
+				<div class="item">5</div>
+			
+			</div>
+
+		</div>
+		
+		<div class="content four" >
+			<div> 
+				<div class="item">1</div>
+				<div class="item">2</div>
+			
+			</div>
+			
+			<div> 
+				<div class="item">3</div>
+				<div class="item">4</div>
+			
+			</div>
+
+		</div>
+		
+		<div class="content three" >
+			<div class="item" style="align-self: flex-start;">1</div>
+			<div class="item">2</div>
+			<div class="item" style="align-self: flex-end;">3</div>
+			
+		</div>
+		
+		
+		<div class="content two" >
+			<div class="item">1</div>
+			<div class="item">2</div>
+			
+		</div>
+		
+		<div class="content one" >
+			<div class="item">1</div>
+		</div>
+	</body>
+</html>
