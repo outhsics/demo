@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>打气球</title>
+	<style>
+		html{height: 100%;}
+		body{height: 100%;overflow: hidden;margin:0;}
+		
+		.blow{animation: blow .2s}
+		@keyframes blow{
+			0%{transform: scale(2);opacity: 1}
+			50%{transform: scale(5);opacity: .5}
+			60%{transform: scale(8);opacity: .1}
+			100%{transform: scale(8);opacity: 0}
+		}
+	</style>
+</head>
+<body>
+	<script src="qq.js"></script>
+	<script src="Cloud.js"></script>
+	<script src="gun.js"></script>
+	<script src="pointer.js"></script>
+	<script src="bg.js"></script>
+	<script src="game.js"></script>
+
+	<script>
+		
+		game.startGame();
+		
+	</script>
+</body>
+</html>
