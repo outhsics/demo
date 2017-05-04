@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/js/jquery-1.11.3.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <h2>代理跨域</h2>
+    <button type="button" id="btn">ajax请求</button>
+    <script>
+        $("#btn").on('click',function(){
+            $.ajax({
+                // url : "http://m.maizuo.com/v4/api/billboard/home?__t=1489757848973",
+                url : "/proxy" ,
+                type : 'get',
+                data : {url : "http://m.maizuo.com/v4/api/billboard/home?__t=1489757848973"},
+                dataType : 'json',
+                success : function(res){
+                    console.log(JSON.parse(res));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

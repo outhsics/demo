@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/js/jquery-1.11.3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        body {background: #f2f2f2; color: #414141;}
+        .blog {width: 960px; margin : 50px auto 0; border: 1px solid #ccc; background: #fff;
+        padding: 20px;}
+
+        .blog h1 {text-align: center; padding-bottom: 20px; border-bottom: 1px solid #ccc;}
+        .blog li {border-bottom: 1px dotted #ddd;}
+        .page {text-align: center;}
+    </style>
+</head>
+<body>
+    <div class="blog">
+        <h1>博客列表 <small><script>document.write(new Date().toLocaleString())</script></small></h1>
+        <ul></ul>
+        <p class="loading">
+        </p>
+    </div>
+    <script>
+    var page = 1;
+    var pagesize = 4;
+    //ajax方式获取指定page的博客内容
+    function getBlogs(page){
+        $.ajax({
+            url : "/blog",
+            type : "get",
+            data : {page,pagesize},
+            dataType : 'json',
+            beforeSend: function(){
+                //增加一个img标签，载入loading.gif图片
+                $(".loading").html('<img src="/images/loading.gif" alt=""/>');
+            },
+            success : function(res){
+                console.log(res);
+                if (res.blog.length){
+                    let str = "";
+                    res.blog.forEach(function(item){
+                        str += `<li>
+                                    <h2><a href="">${item.title}</a></h2>
+                                    <p>${item.time}</p>
+                                    <p>${item.summary}</p>
+                                </li>`;
+                    });
+                    $(".blog ul").append(str);
+                    $(".loading").html('');
+                } else {
+                    $(".loading").html('没有更多了');
+                }
+
+            }
+        });
+    }
+
+    //第一次，调用getBlogs
+    getBlogs(page);
+
+    //注册滚动事件
+    $(window).on('scroll',function(){
+        //获取可视窗口的高度
+        var ch = $(window).height();
+        //获取文档内容的高度
+        var ot = $(document).height();
+        //获取滚动条滚动的高度
+        var st = $(window).scrollTop();
+        // console.log(ch + '---' + ot +  "---" + st);
+
+        if (ch + st >= ot) {
+            //发起ajax请求
+            getBlogs(++page);
+        }
+    });
+    </script>
+</body>
+</html>

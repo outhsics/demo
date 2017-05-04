@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {background: #f2f2f2; color: #414141;}
+        .blog {width: 960px; margin : 50px auto 0; border: 1px solid #ccc; background: #fff;
+        padding: 20px;}
+
+        .blog h1 {text-align: center; padding-bottom: 20px; border-bottom: 1px solid #ccc;}
+        .blog li {border-bottom: 1px dotted #ddd;}
+    </style>
+</head>
+<body>
+    <div class="blog">
+        <h1>博客列表</h1>
+        <ul>
+            <% for (var i = 0; i < data.length; i++) { %>
+            <li>
+                <h2><a href=""><%= data[i].title  %></a></h2>
+                <p><%= data[i].time  %></p>
+                <p><%= data[i].summary  %></p>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+
+</body>
+</html>

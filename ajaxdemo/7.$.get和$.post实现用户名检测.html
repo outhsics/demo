@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/js/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+    <form action="">
+        <ul>
+            <li>
+                <label for="">用户名：</label>
+                <input type="text" name="username" id="userInput">
+                <span id="tip"></span>
+            </li>
+            <li>
+                <label for="">密码：</label>
+                <input type="password" name="password">
+            </li>
+            <li>
+                <input type="submit" value="注册">
+            </li>
+        </ul>
+    </form>
+    <script>
+        $("#userInput").on('blur',function(){
+            //使用get方式发起请求
+            $.get('/check',{username : $(this).val()},function(msg){
+                //成功的返回了数据，数据就是msg
+                console.log(msg);
+                $("#tip").html(msg.msg);
+            },'json');
+
+            //使用post方式发请求
+            // $.post('/check',{username:$(this).val()},function(msg){
+            //     $("#tip").html(msg);
+            // },'text')
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/js/jquery-1.11.3.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <form action="">
+        <ul>
+            <li>
+                <label for="">用户名：</label>
+                <input type="text" name="username" id="userInput">
+                <span id="tip"></span>
+            </li>
+            <li>
+                <label for="">密码：</label>
+                <input type="password" name="password">
+            </li>
+            <li>
+                <input type="submit" value="注册">
+            </li>
+        </ul>
+    </form>
+
+    <button type="button" id="btn">getJson</button>
+    <script>
+        $("#userInput").on('blur',function(){
+            let username = $(this).val();
+            $.ajax({
+                url :  '/check',//提交的url地址
+                type : 'get', //指定提交的方式
+                data: {username}, //提交的数据
+                dataType : 'json', //返回数据的格式
+                async : true, //异步方式
+                success : function(msg){ //成功了接收到响应
+                    console.log(msg);
+                    $("#tip").html(msg.msg);
+                },
+                error : function(err){ //失败了
+                    console.log(err);
+                },
+                timeout : 1 //超时时间
+            });
+        });
+
+        $("#btn").on('click',function(){
+            $.getJSON('http://localhost:5000/js/blog.json',function(data){
+                console.log(data);
+            });
+        });
+    </script>
+</body>
+</html>

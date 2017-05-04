@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h2>省市区三级联动</h2>
+    <label for="">请选择省份：</label>
+    <select name="province" id="province">
+        <option value="">--省份--</option>
+    </select>
+    <select name="city" id="city">
+        <option value="">--市区--</option>
+    </select>
+    <select name="country" id="country">
+        <option value="">--区县--</option>
+    </select>
+
+    <script>
+        //第一步，实例化一个xhr对象
+        var xhr = new XMLHttpRequest();
+        //第二步，建立和服务器的连接，设置请求信息
+        xhr.open('get','/province');
+        //第三步，监听状态的变化
+        xhr.onreadystatechange = function(){
+            if (xhr.status == 200 && xhr.readyState == 4) {
+                //可以接受返回值
+                let provinces = JSON.parse(xhr.responseText);
+                console.log(provinces);
+                let str = '<option value="">--省份--</option>';
+                provinces.forEach( function(item){
+                    str += `<option value="${item}">${item}</option>`;
+                });
+                document.getElementById('province').innerHTML = str;
+            }
+        }
+        //第四步，发送请求
+        xhr.send(null);
+
+        //获取省份的select
+        var province = document.getElementById('province');
+        //需要注册change事件
+        province.onchange = function(){
+            //将三级的区县置空
+            document.getElementById("country").innerHTML = '<option value="">--区县--</option>';
+            xhr.open('get','/city?province='+this.value);
+            xhr.onreadystatechange = function(){
+                if (xhr.status == 200 && xhr.readyState == 4) {
+                    let citys = JSON.parse(xhr.responseText);
+                    console.log(citys);
+                    let str = '<option value="">--市区--</option>';
+                    citys.forEach(function(item){
+                        str += `<option value="${item}">${item}</option>`;
+                    });
+                    document.getElementById("city").innerHTML = str;
+                }
+            }
+            xhr.send(null);
+        }
+
+        //获取city的select
+        var city = document.getElementById("city");
+        //注册change事件
+        city.onchange = function(){
+            xhr.open("get","/country?city="+this.value);
+            xhr.onreadystatechange = function(){
+                if (xhr.status == 200 && xhr.readyState == 4) {
+                    let countries = JSON.parse(xhr.responseText);
+                    let str = '<option value="">--区县--</option>';
+                    countries.forEach(function(item){
+                        str += `<option value="${item}">${item}</option>`
+                    });
+                    document.getElementById("country").innerHTML = str;
+                }
+            }
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

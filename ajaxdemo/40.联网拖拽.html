@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/js/socket.io.js" charset="utf-8"></script>
+    <style>
+        #box {width: 100px; height: 100px; background: #f00;
+            position: absolute; left :10px; top: 60px;}
+    </style>
+</head>
+<body>
+    <h2>联网拖拽</h2>
+    <div id="box"></div>
+
+    <script>
+        //建立和服务端连接的socket通道
+        var socket = io.connect("http://192.168.0.225:3000");
+
+        var box = document.getElementById('box');
+        var mouseX,mouseY, boxX,boxY;
+        //注册mousedown事件
+        box.onmousedown = function(e){
+            var evt = e || window.event;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            boxX = box.offsetLeft;
+            boxY = box.offsetTop;
+            //在鼠标按下去之后注册mousemove事件
+            document.onmousemove = function(e){
+                var evt = e || window.event;
+                //获取鼠标移动的距离
+                box.style.left = e.clientX - mouseX + boxX + "px";
+                box.style.top = e.clientY - mouseY + boxY + "px";
+                //此时，应该向服务端发起请求，告诉我的新坐标
+                socket.emit('move',{x : e.clientX - mouseX + boxX ,  y :e.clientY - mouseY + boxY });
+            }
+        }
+        document.onmouseup = function(){
+            document.onmousemove = null;
+        }
+
+        //响应服务端发送的drag事件
+        socket.on('drag',function(data){
+            //使用data中的x、y坐标设置box的位置即可
+            box.style.left = data.x + "px";
+            box.style.top = data.y + "px";
+        });
+
+
+
+
+    </script>
+</body>
+</html>

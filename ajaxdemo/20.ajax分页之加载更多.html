@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/js/jquery-1.11.3.min.js" charset="utf-8"></script>
+    <style>
+        body {background: #f2f2f2; color: #414141;}
+        .blog {width: 960px; margin : 50px auto 0; border: 1px solid #ccc; background: #fff;
+        padding: 20px;}
+
+        .blog h1 {text-align: center; padding-bottom: 20px; border-bottom: 1px solid #ccc;}
+        .blog li {border-bottom: 1px dotted #ddd;}
+        .page {text-align: center;}
+    </style>
+</head>
+<body>
+    <div class="blog">
+        <h1>博客列表 <small><script>document.write(new Date().toLocaleString())</script></small></h1>
+        <ul></ul>
+        <p class="page">
+            <button type="button" id="btn">加载更多</button>
+        </p>
+    </div>
+
+    <script>
+        var page = 1;
+        var pagesize = 4;
+        //ajax方式获取指定page的博客内容
+        function getBlogs(page){
+            $.ajax({
+                url : "/blog",
+                type : "get",
+                data : {page,pagesize},
+                dataType : 'json',
+                beforeSend: function(){
+                    $("#btn").text('玩命加载中...');
+                },
+                success : function(res){
+                    console.log(res);
+                    if (res.blog.length){
+                        let str = "";
+                        res.blog.forEach(function(item){
+                            str += `<li>
+                                        <h2><a href="">${item.title}</a></h2>
+                                        <p>${item.time}</p>
+                                        <p>${item.summary}</p>
+                                    </li>`;
+                        });
+                        $(".blog ul").append(str);
+                        //修改btn的内容
+                        $("#btn").text('加载更多');
+                    } else {
+                        $("#btn").text('没有更多了');
+                    }
+
+                }
+            });
+        }
+
+        //第一次，调用getBlogs
+        getBlogs(page);
+
+        //针对btn，注册点击事件
+        $("#btn").on('click',function(){
+            page++;
+            getBlogs(page);
+        });
+    </script>
+</body>
+</html>

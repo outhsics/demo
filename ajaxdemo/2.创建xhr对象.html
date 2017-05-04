@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //非ie浏览器的创建
+        var xhr = new XMLHttpRequest();
+        console.log(xhr);
+
+        //ie低版本浏览器
+        var xhr1 = new ActiveXObject("Microsoft.XMLHTTP");
+        var xhr2 = new ActiveXObject("Msxml2.XMLHTTP");
+
+
+        //定义函数，创建兼容的xhr对象
+        // function createXHR(){
+        //     var xhr = null;
+        //     if (XMLHttpRequest) {
+        //         xhr = new XMLHttpRequest();
+        //     } else if (ActiveXObject("Microsoft.XMLHTTP")){
+        //         xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        //     } else if (ActiveXObject("Msxml2.XMLHTTP")) {
+        //         xhr = new ActiveXObject("Msxml2.XMLHTTP");
+        //     } else {
+        //         xhr = false;
+        //     }
+        //     return xhr;
+        // }
+
+        function createXHR(){
+            var xhr = null;
+            try {
+                 xhr = new XMLHttpRequest();
+            } catch (e) {
+                try {
+                    xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch(e1) {
+                    try {
+                        xhr = new ActiveXObject("Msxml2.XMLHTTP")
+                    } catch(e2) {
+                        xhr = false;
+                    }
+                }
+            }
+            return xhr;
+        }
+
+
+
+    </script>
+</body>
+</html>

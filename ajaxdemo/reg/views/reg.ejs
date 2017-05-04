@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h2>用户注册</h2>
+    <form action="/reg" method="post">
+        <ul>
+            <li>
+                <label for="">用户名：</label>
+                <input type="text" name="username" id="userInput">
+                <span id="msg"></span>
+            </li>
+            <li>
+                <label for="">密码：</label>
+                <input type="password" name="pasword">
+            </li>
+            <li>
+                <input type="submit" value="注册">
+            </li>
+        </ul>
+    </form>
+    <script>
+        //获取input框
+        var userInput = document.getElementById('userInput');
+        //注册blur事件
+        userInput.onblur = function(){
+
+            //第一步，实例化一个xhr对象
+            var xhr = new XMLHttpRequest();
+            // alert(xhr.readyState); //0,表示xhr创建成功了
+            //对用户的输入内容进行编码
+            // var username =  this.value ;
+            var username = encodeURIComponent( this.value );
+            //第二步，连接服务器，设置请求信息
+            //get方式
+            // xhr.open('GET','/reg?username='+username);
+            //post方式
+            xhr.open("post",'/reg');
+            // alert(xhr.readyState); //初始化xhr对象，建立连接，设置好参数
+            //使用post方式时，必须指定头信息
+            xhr.setRequestHeader("content-type","application/x-www-form-urlencoded");
+            //第三步，注册readystatechange事件，监听服务器的返回情况
+            xhr.onreadystatechange = function(){
+                // alert(xhr.readyState);
+                // alert(xhr.responseText);
+                if (xhr.status == 200 && xhr.readyState == 4) {
+                    //表示服务器成功的返回了结果
+                    // document.getElementById("msg").innerHTML = xhr.responseText;
+                    let obj = JSON.parse(xhr.responseText);
+                    console.log(obj);
+                    document.getElementById("msg").innerHTML = obj.msg;
+                }
+            }
+            //第四步,发起请求
+            //get方式
+            // xhr.send(null);
+            //post方式
+            xhr.send("username="+username);
+            //后续的任务
+            // alert('后续的任务');
+        }
+    </script>
+</body>
+</html>
