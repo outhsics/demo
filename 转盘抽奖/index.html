@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>大转盘</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="css/amazeui.min.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
+    <link href="css/top.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+</head>
+
+<!-- main -->
+<body class="xy-market xy-data-20150921 xy-body">
+<div class="xy-pan-main">
+    <div class="xy-pan-pan"></div>
+    <div class="xy-pan-zhen"></div>
+    <div class="xy-pan-click"></div>
+</div>
+<div class="xy-btn-wrap">
+    <a class="ui button btnRule">
+        活动规则
+    </a>
+    <a class="ui button btngoIndex">
+        查看官网
+    </a>
+</div>
+<div class="xy-bottom">
+    <img src="img/h5-20150921-bottom-logo.png"></div>
+</div>
+
+<!-- 抽奖后弹框 -->
+<div class="xy-show-window">
+    <div class="xy-show-wrap">
+        <div class="xy-show-form">
+            <p><input type="text" class="am-form-field am-radius" placeholder="输入手机号注册领取" /></p>
+            <a class="am-btn am-btn-block" href="#" target="_blank">提交</a>
+        </div>
+        <div class="xy-show-recommend">
+            <div class="xy-show-recommend-img">
+                <img src="img/h5-20150921-test-img.jpg"/>
+                <div class="xy-theme">潜水</div>
+                <div class="xy-shop-recomment-tip">住在船里漂在海上潜马代</div>
+            </div>
+            <div class="xy-show-recommend-bottom">
+                <div class="bottom-img">
+                    <img src="img/h5-20150921-test-img-2.jpg"/>
+                    <span>达人潜女郎</span>
+                </div>
+                <div class="bottom-tip">
+                    <p>豪华游轮新途欧丽公主号体验;马代最经典的中部环礁路线;各类鲨鱼群和珊瑚群都不会错过;潜水之余还有有趣的海钓活动安排;最专业也是最逗比的潜水专家陪同</p>
+                    <a href="http://baidu.com">查看此路线</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 分享提示 -->
+<div class="xy-tip-share">
+    <div class="xy-tip-share-top">
+        <img src="img/h5-20150921-share-tip-1.png"/>
+    </div>
+    <div class="xy-tip-share-bottom">
+        <img src="img/h5-20150921-share-tip-2.jpg"/>
+    </div>
+</div>
+
+<div class="xy-tip-rule">
+    <div class="xy-rule-wrap">
+        <p>活动规则：</p>
+        <p>1.每个微信ID可抽奖一次，根据提示分享活动链接再获一次抽奖机会，每个ID最多抽奖2次</p>
+        <p>2.旅行基金可以在www.vwind.com或者微风旅行APP上直接抵扣相应金额</p>
+        <p>3.旅行基金有效期：即日起到2015/10/15</p>
+        <p>如需咨询，请加QQ群微风旅行集合1群：486305643，入群暗号：大转盘</p>
+    </div>
+</div>
+</body>
+<script>
+    //(338,293,248,203,158,113,68,23)（逆时针 角度）
+
+    //中奖,对应是1000
+    var prizeArry1 = new Array(248,158,23);
+
+    //中奖，对应是100
+    var prizeArry2 = new Array(338,293,113,68);
+
+    //没中奖
+    var noprizeArry = new Array(203,0);
+
+    $(function(){
+
+        //文字太多，剪切
+        if($(".bottom-tip>p").html().length>40){
+            $(".bottom-tip>p").html($(".bottom-tip>p").html().substring(0,30)+" . . .")
+        }
+
+        //点击开始抽奖
+        $(".xy-pan-click").one("click",function(){
+            func_get_noprize();
+        })
+
+        //活动规则
+        $(".xy-btn-wrap .btnRule").click(function(){
+            $(".xy-tip-rule").fadeIn(200);
+            $(".xy-tip-rule").click(function(){
+                $(".xy-tip-rule").fadeOut(200);
+            });
+        });
+
+        //指针旋转处理及抽奖弹窗
+        function func_start(deg,tip,prize){
+
+            var obj = $('.xy-pan-zhen')[0];
+
+            var __deg = 360 * 10 + deg;
+
+            $(obj).css('-webkit-transition-property', 'all');
+
+            $(obj).css('-webkit-transition-duration', '6s');
+
+            $(obj).css('-webkit-transition-timing-function', 'ease-in-out');
+            // transform-origin: 70% 50%;
+            $(obj).css('-webkit-transform-origin','center center');
+
+            $(obj).css('-webkit-transform', 'rotate(' + __deg + 'deg)');
+
+
+            setTimeout(function(){
+
+                $(".xy-show-window").fadeIn(200);
+
+                if(prize==0){
+                    $(".xy-show-wrap").addClass('xy-prize-loss');
+                }
+                else if(prize==1){
+                    $(".xy-show-wrap").addClass('xy-prize-1000');
+                }
+                else if(prize==2){
+                    $(".xy-show-wrap").addClass('xy-prize-100');
+                }
+                setTimeout(function(){
+                    $(".xy-show-wrap").addClass("show");
+                },300);
+                console.log(tip);
+            },6500);
+
+        }
+
+        //没中
+        function func_get_noprize(){
+            var rn = Math.random() * 1;
+            var num = Math.floor(rn);
+
+
+            var deg = noprizeArry[num];
+
+            func_start(deg,"没中",0);
+        }
+        //1000
+        function func_get_prize1(){
+            var rn = Math.random() * 3;
+            var num = Math.floor(rn);
+
+            var deg = prizeArry1[num];
+
+            func_start(deg,"1000",1);
+        }
+        //100
+        function func_get_prize2(){
+            var rn = Math.random() * 4;
+            var num = Math.floor(rn);
+
+            var deg = prizeArry2[num];
+
+            func_start(deg,"100",2);
+        }
+    })
+</script>
+</html>
