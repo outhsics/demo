@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/jquery-1.11.3.min.js" charset="utf-8"></script>
+    <script src="js/bootstrap.js" charset="utf-8"></script>
+
+    <style>
+        body {background: url('./images/login-background.jpg') no-repeat center center fixed;
+    background-size: cover;}
+
+        .login {width: 750px; margin-top: 10%; }
+        .login .row {border-bottom: 1px solid rgba(255,255,255,.3); padding-bottom: 30px;}
+        .login form { background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3);
+        padding: 30px; border-radius: 3px; box-shadow: 0 3px 0 rgba(12,12,12,.03);}
+        .login h3 {color: #fff; font-weight: bold; margin-bottom: 10px;}
+        .login .form-group {position: relative;}
+        .login .form-group i {position: absolute; right: 10px; top: 9px;}
+        .footer {margin-top: 20px; color: #fff;}
+
+        @media screen and (max-width: 768px) {
+            .login {width: auto;}
+            form {width: 400px; margin: 0 auto;}
+        }
+    </style>
+</head>
+<body>
+    <div class="login center-block">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <form action="">
+                    <h3>管理员登录</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="用户名">
+                        <i class="glyphicon glyphicon-user"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="密码">
+                        <i class="glyphicon glyphicon-lock"></i>
+                    </div>
+                    <p><a href="">忘记密码了？</a></p>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block">登录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="footer text-center">
+            <p>© 2016 All Rights Reserved. Diamondwang</p>
+        </div>
+    </div>
+</body>
+</html>
