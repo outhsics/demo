@@ -1,0 +1,156 @@
+<template>
+    <div>
+      <box gap="20px 0">
+          <flexbox justify="center">
+              <flexbox-item><div class="task-item">QV0Y62</div></flexbox-item>
+              <flexbox-item><div class="task-item">电池图标</div></flexbox-item>
+              <flexbox-item><div class="task-item">待救援</div></flexbox-item>
+          </flexbox>
+      </box>
+      <box gap="10px">
+          <div id="map"></div>
+          <div class="maptips">{{ tips }}</div>
+      </box>
+      <box gap="10px 60px">
+          <flexbox>
+              <flexbox-item>
+                  <x-button type="default" @click.native="startTask">开始处理</x-button>
+              </flexbox-item>
+              <flexbox-item>
+                  <x-button type="default" @click.native="backList">返回列表</x-button>
+              </flexbox-item>
+          </flexbox>
+      </box>
+  
+      <div v-transfer-dom>
+          <alert v-model="stratShow" :title="$t('Congratulations')" @on-show="onShow" @on-hide="onHide"> {{ $t('Your Message is sent successfully~') }}</alert>
+      </div>
+      <div v-transfer-dom>
+          <confirm v-model="backShow"
+          :title="$t('Confirm deleting the item')"
+          @on-cancel="backCancel"
+          @on-confirm="backConfirm"
+          @on-show="onShow"
+          @on-hide="onHide">
+              <p>{{ $t('Are you sure?') }}</p>
+          </confirm>
+      </div>
+    </div>
+  </template>
+  
+  <i18n>
+  deal:
+    zh-CN: 开始处理
+  Show Me:
+    zh-CN: 显示
+  Use as a plugin:
+    zh-CN: 以插件方式调用
+  Congratulations:
+    zh-CN: 恭喜
+  Your Message is sent successfully~:
+    zh-CN: 消息已成功发送
+  Do you agree?:
+    zh-CN: 同意不?
+  Will auto close in 3s:
+    zh-CN: 3秒后关闭
+  </i18n>
+  
+  <script>
+  import { XButton, Flexbox, FlexboxItem, Box, Alert, Confirm, TransferDomDirective as TransferDom } from 'vux';
+  import './task.scss';
+  
+  const google = window.google;
+  
+  export default {
+      name: 'demoTask',
+      directives: {
+          TransferDom
+      },
+      components: {
+          Box,
+          Alert,
+          Confirm,
+          XButton,
+          Flexbox,
+          FlexboxItem
+      },
+      mounted() {
+          this.initMap();
+          this.$store.commit('updateTitle', '任务详情');
+      },
+      data() {
+          return {
+              stratShow: false,
+              backShow: false,
+              tips: '',
+              dealStatus: ''
+          };
+      },
+      methods: {
+          initMap() {
+              const that = this;
+              if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition((position) => {
+                      const startPos = {
+                          lat: position.coords.latitude,
+                          lng: position.coords.longitude
+                      };
+  
+                      const dtDisplay = new google.maps.DirectionsRenderer();
+                      const dtService = new google.maps.DirectionsService();
+  
+                      const map = new google.maps.Map(document.getElementById('map'), {
+                          zoom: 14,
+                          center: startPos,
+                          mapTypeControl: false,
+                      });
+  
+                      dtDisplay.setMap(map);
+  
+                      const endPos = {
+                          lat: 40.009177,
+                          lng: 116.506442
+                      };
+                      that.calculateAndDisplayRoute(dtService, dtDisplay, startPos, endPos);
+                  }, () => {
+                      console.log('错误');
+                  });
+              }
+          },
+          calculateAndDisplayRoute(dtService, dtDisplay, startPos, endPos) {
+              const that = this;
+              dtService.route({
+                  origin: startPos,
+                  destination: endPos,
+                  travelMode: 'WALKING'
+              }, (result, status) => {
+                  if (status === 'OK') {
+                      that.tips = result.routes[0].legs[0].distance.text;
+                      dtDisplay.setDirections(result);
+                  } else {
+                      console.log(`Directions request failed due to ${status}`);
+                  }
+              });
+          },
+          startTask() {
+              this.backShow = true;
+          },
+          backList() {
+  
+          },
+          onHide() {
+              console.log('on hide');
+          },
+          onShow() {
+              console.log('on show');
+          },
+          backConfirm() {
+  
+          },
+          backCancel() {
+  
+          }
+      }
+  };
+  </script>
+  
