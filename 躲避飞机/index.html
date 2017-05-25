@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<style>
+		#content{
+			width: 400px;
+			height: 400px;
+			background-color: #000;
+			margin:50px auto;
+			position:relative;
+		}
+		.resultArea{position: absolute;top:0;width: 100%;line-height: 30px;color:#fff;}
+	</style>
+</head>
+<body>
+	
+	<div id="content">
+		<p class="resultArea">你坚持了：<span class="result">0</span>秒</p>
+
+	</div>
+
+	<script>
+
+		function isOver(bullets,planeabc,D){
+			var flag = false; //假设没有撞上
+
+			//对所有的子弹
+			for (var i = 0; i < bullets.length; i++) {
+				//
+				 var d = Math.sqrt( Math.pow( bullets[i].x - planeabc.x,2) +  Math.pow( bullets[i].y - planeabc.y,2) )
+				 if(d < D){
+				 	//撞上了
+				 	flag = true;
+				 	break;
+				 }
+			}
+
+			return flag;
+
+		}
+
+	    //得到一个[m,n] 区间的整数
+		function r(m,n){
+			return  Math.ceil( m + (n-m)*Math.random() );
+		}
+
+		var keyStatus = {};
+
+		document.addEventListener("keyup",function(e){
+			keyStatus[e.keyCode] = false;
+		})
+
+		document.addEventListener("keydown",function(e){
+			
+			keyStatus[e.keyCode] = true;
+
+			e.preventDefault();
+			return false;
+		})
+
+		var plane = {
+
+			ele : document.createElement("div"),
+			x:200,//在屏幕正中间
+			y:200,
+			set : function(){
+				this.ele.style.position = "absolute";
+				this.ele.style.background = "url('plane2.png')";
+				this.ele.style.backgroundSize = "100% 100%";
+				this.ele.style.width = "40px";
+				this.ele.style.height = "40px";
+				this.ele.style.top = (this.y-20) +"px";
+				this.ele.style.left = (this.x-20) +"px";
+
+				document.getElementById('content').appendChild(this.ele);
+			},
+			move:function(){
+				console.info(this.x,this.y);
+
+				this.x = this.x > (400-20) ? (400-20) : this.x;
+				this.x = this.x < 0   ? 0   : this.x;
+				this.y = this.y > (400-20) ? (400-20) : this.y;
+				this.y = this.y < 0   ? 0   : this.y;
+
+				this.ele.style.top = (this.y-20) +"px";
+				this.ele.style.left = (this.x-20) +"px";
+			},
+			update:function(){
+				var dt = 5;//按下键时，改变位置的值
+
+				//所有合法的按键的可能性：
+				//四种基本的： 上 下 左 右
+				//四种组合的： 上左，上右，下左，下右
+				// var dt = 5;//按下键时，改变位置的值
+					
+				if(keyStatus[38] == true && keyStatus[37] == true){
+					//左上
+					plane.x -= dt;
+					plane.y -= dt;
+				}
+				else if(keyStatus[40] == true && keyStatus[37] == true){
+					//左下
+					plane.x -= dt;
+					plane.y += dt;	
+				}
+				else if(keyStatus[39] == true && keyStatus[38] == true){
+					//右上
+					plane.x += dt;
+					plane.y -= dt;	
+				}
+				else if(keyStatus[39] == true && keyStatus[40] == true){
+					//右下
+					plane.x += dt;
+					plane.y += dt;	
+				}
+				else if(keyStatus[38] == true ){
+					//向上，减小y
+					plane.y -= dt;
+				}
+				else if(keyStatus[40] == true ){
+					//向下，增加y
+					plane.y += dt;
+				}
+				else if(keyStatus[37] == true){
+					//向左，减小x
+					plane.x -= dt;
+				}
+				else if(keyStatus[39] == true){
+					//向右，增加x
+					plane.x += dt;
+				}
+				//更新飞机的位置
+				plane.move();
+			}
+			
+		}
+		var game = {
+			result      : document.querySelector(".result"),
+			bullets     : [],
+			timer       : 0, //定时器
+			frameIndex  : 0,
+			bulletNumber: 20, //子弹数量
+			startGame:function () {
+				
+				var score = 0 ;
+				plane.set();   //让飞机就位
+
+				for (var i = 0; i < this.bulletNumber; i++) {
+					this.bullets.push( new Bullet() );
+				}
+				var that = this;
+				//主循环
+				this.timer = setInterval(function(){
+					if( isOver(that.bullets,plane,20) ){
+						console.info("over");
+						that.stopGame();
+					}
+
+
+					plane.update();	//更新飞机的位置
+
+
+
+					for (var i = 0; i < that.bulletNumber; i++) {
+						that.bullets[i].move();
+					}
+					that.frameIndex++;
+
+					//设置分数
+					if(that.frameIndex % 2 == 0){
+						score++;
+					}
+					that.result.innerHTML = score/10 ; // 20.1s
+					//b1.move(); 
+					//让所有的子弹开始动起来
+					// console.info(that.frameIndex);
+					
+				},50)
+			},
+			stopGame:function(){
+				clearInterval(this.timer);
+			}
+		}
+
+		//dx 区间是 [-5,5],整数
+		//     dx = Math.ceil( 5 - Math.random()*10  )
+		//dx 区间是 [m,n],整数
+		//     dx = m +  (n-m)*Math.random()
+		function Bullet(){
+			this.dx     = r(-5,5)  //x方向的速度
+			this.dy     = r(-5,5); //y方向的速度
+
+			this.x      = r(30,50);		//子弹的中心点位置
+			this.y      = r(30,50);       //子弹的中心点位置
+			this.color  = "rgb("+r(0,255)+","+r(0,255)+","+r(0,255)+")";//颜色；
+			this.width  = 10;
+			this.height = 10;
+			this.span   = document.createElement("span");
+
+			//把属性设置到对应dom元素上
+			//
+			this.span.style.position = "absolute";
+			this.span.style.zIndex = 2;
+
+			this.span.style.width = this.width +"px";
+			this.span.style.height = this.height +"px";
+			this.span.style.backgroundColor = this.color;
+			this.span.style.top = (this.y  - this.height/2) + "px";		//修正一下子弹的位置：减去高度的一半
+			this.span.style.left = (this.x - this.width/2 ) + "px";     //修正一下子弹的位置：减去宽度的一半
+
+			//把dom元素添加到屏幕上
+			document.getElementById('content').appendChild(this.span);
+		}
+
+		Bullet.prototype.move = function() {
+
+			if(this.x > 400 - this.width){
+				this.dx = -1 * this.dx;
+				this.x = 400 - this.width
+			}
+			else if(this.x < 0){
+				//this.x = 0
+				this.dx = -1 * this.dx;
+			};
+
+			if(this.y > 400-this.height){
+				this.y = 400-this.height;
+				this.dy = -1 * this.dy
+			}
+			else if(this.y < 0){
+				//this.y = 0
+				this.dy = -1 * this.dy
+			};
+
+			//在当前的位置上，加上速度
+			this.x = this.x + this.dx;
+			this.y = this.y + this.dy;
+
+			//更新到dom元素中
+		
+			this.span.style.top  = this.y + "px";
+			this.span.style.left = this.x + "px";
+		};
+
+		game.startGame();
+
+
+	</script>
+</body>
+</html>
